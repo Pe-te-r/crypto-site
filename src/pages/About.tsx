@@ -7,6 +7,7 @@ import image4 from '../assets/monitoring.jpeg'
 import image5 from '../assets/mining_plan.jpeg'
 import image6 from '../assets/Data Security.jpeg'
 import image7 from '../assets/mining_setup.jpeg'
+import image8 from '../assets/Digital Gold Rush.jpeg'
 
 const About = () => {
   const cardsData = [
@@ -41,6 +42,7 @@ const About = () => {
     },
     {
       image:image6,
+      side:'left',
       title:'Secure and Reliable: Your Investment, Our Priority',
       description:'We utilize advanced security protocols to safeguard your investments and ensure your data remains confidential. Trust in our commitment to keeping your mining operations safe and sound.'
     },
@@ -50,19 +52,53 @@ const About = () => {
   return (
     <div className='bg-slate-200 min-h-screen mt-0 p-3 '>
 
-    <div className='flex pt-2 justify-center'>
-      <img src={image} alt=" money"  className='blur-0'/>
+      <div>
+
+      <h3 className='font-bold text-center text-[2.1rem]'>About our company</h3>
+
+    <div className='flex flex-wrap justify-center'>
+
+      <Card
+      image={image}
+      side='left'
+      title=' Welcome to Our Crypto Mining Services'
+      description=' Based in Johannesburg, South Africa, we specialize in high-performance crypto mining servers tailored to your needs. 
+      Hire a server that fits your capability and start mining. Invest wisely, and reap the rewards: with our service, you pay for 
+      what you use, and enjoy the benefits of owning your mining account.'
+       />
+        <Card
+      image={image8}
+      side='right'
+      title=' Experience the Future of Crypto Mining with Peer Mining'
+      description='At Peer Mining, we are dedicated to providing our clients with state-of-the-art mining technology and unparalleled support. 
+      Our team of experts is here to guide you through the process, ensuring that you maximize your mining potential. 
+      Join us in harnessing the power of blockchain technology, and unlock the rewards of crypto mining today!'
+      />
+      </div>
+      </div>
+      {/* Image Section */}
+      {/* <div className='flex pt-2 justify-center'>
+        <img src={image} alt="money" className='blur-0' />
+      </div> */}
+  
+      {/* Why Choose Us Section */}
+      <div className=''>
+        <h3 className='text-center font-bold m-2 text-[20px]'>Why Choose Us</h3>
+        <div className="flex flex-wrap justify-center">
+          {cardsData.map((card, index) => (
+            <Card
+              key={index}
+              title={card.title}
+              image={card.image}
+              side={card.side}
+              description={card.description}
+            />
+          ))}
+        </div>
+      </div>
     </div>
-    <div className=''>
-      <h3 className='text-center font-bold m-2 text-[20px]'>Why choose us</h3>
-      <div className="flex flex-wrap justify-center">
-      {cardsData.map((card, index) => (
-        <Card key={index} title={card.title} image={card.image} side={card.side} description={card.description} />
-      ))}
-    </div>
-    </div>
-    </div>
-  )
+  );
+  
 }
 
 export default About
