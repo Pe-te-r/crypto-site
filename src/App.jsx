@@ -2,6 +2,7 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import Layout from './components/Layout';
+import About from './pages/About';
 
 // Define your routes with Layout as the wrapper
 const router = createBrowserRouter([
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
         path: '/',
         element: <Home />,  // Home is displayed under the NavBar
       },
+      {
+        path:'/about',
+        element: <About/>
+      }
       // {
       //   path: '/about',
       //   element: <About />, // About Us is displayed under the NavBar
