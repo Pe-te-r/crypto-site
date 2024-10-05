@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Layout from './components/Layout';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Account from './pages/Account';
 
 // Define your routes with Layout as the wrapper
 const router = createBrowserRouter([
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path:'/contact',
         element: <Contact/>
+      },
+      {
+        path:'/account',
+        element: <Account/>
       }
 
       // {

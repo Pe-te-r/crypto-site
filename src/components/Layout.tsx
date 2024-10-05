@@ -8,7 +8,7 @@ const Layout = () => {
       {/* NavBar is always displayed */}
       <NavBar />
       {/* Outlet will render the component matched by the current route */}
-      <div className="p-4 h-screen">
+      <div className="p-4 pt-0 h-screen">
         <Outlet />
       </div>
     </div>
