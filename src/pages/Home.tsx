@@ -10,8 +10,38 @@ const Home = () => {
       estimatedMining: "100",
       bitcoinValue: "0.0000125", // This is just an example; calculate dynamically
       packageDetails: "This machine is perfect for beginners looking to start mining crypto easily."
+    },{
+      machineType: "Standard Mining Machine",
+      dailyRate: "10",
+      estimatedMining: "100",
+      bitcoinValue: "0.0000125", // This is just an example; calculate dynamically
+      packageDetails: "This machine is perfect for beginners looking to start mining crypto easily."
+    },{
+      machineType: "Standard Mining Machine",
+      dailyRate: "10",
+      estimatedMining: "100",
+      bitcoinValue: "0.0000125", // This is just an example; calculate dynamically
+      packageDetails: "This machine is perfect for beginners looking to start mining crypto easily."
+    },{
+      machineType: "Standard Mining Machine",
+      dailyRate: "10",
+      estimatedMining: "100",
+      bitcoinValue: "0.0000125", // This is just an example; calculate dynamically
+      packageDetails: "This machine is perfect for beginners looking to start mining crypto easily."
     },
     {
+      machineType: "Advanced Mining Machine",
+      dailyRate: "20",
+      estimatedMining: "200",
+      bitcoinValue: "0.000025", // This is just an example; calculate dynamically
+      packageDetails: "An advanced machine for serious miners. High efficiency and output."
+    },{
+      machineType: "Advanced Mining Machine",
+      dailyRate: "20",
+      estimatedMining: "200",
+      bitcoinValue: "0.000025", // This is just an example; calculate dynamically
+      packageDetails: "An advanced machine for serious miners. High efficiency and output."
+    },{
       machineType: "Advanced Mining Machine",
       dailyRate: "20",
       estimatedMining: "200",
@@ -21,7 +51,7 @@ const Home = () => {
     // Add more packages as needed
   ];
   return (
-    <div className='h-screen  flex flex-col items-center bg-white-200'>
+    <div className='min-h-screen  flex flex-col items-center bg-white-200'>
 
     <div className='relative' > 
       <img src={image} alt="" />
@@ -33,7 +63,7 @@ const Home = () => {
       <button className='btn-primary bg-blue-500 p-2 font-mono rounded-md'>Explore plans</button>
       </div>
     </div>
-      <div className='mt-12 border shadow-lg rounded-md p-2 lg:w-2/4 self-center flex flex-col bg-white'>
+      <div className='mt-12 border shadow-lg rounded-md p-2 lg:w-2/4 self-center flex flex-col bg-gray-200'>
         <p className='font-bold text-center font-sans'>Enjoy professional-grade mining machines with full maintenance support, optimized for maximum returns.</p>
         <div className='m-2 mb-0 flex items-center place-content-center'>
           <input type="Email" className='border-2 rounded-md m-1 outline-none p-2 md:w-1/4 sm:w-2/4 font-serif' placeholder='Email'/>
@@ -48,7 +78,7 @@ const Home = () => {
       </div>
       <div className='mt-5'>
       <h1 className="text-center text-2xl font-bold mb-6">Rental Packages</h1>
-      <div className="flex flex-wrap justify-center">
+      <div className="flex w-3/4  mx-auto flex-wrap justify-center">
         {packagesData.map((pkg, index) => (
           <RentalCard key={index} {...pkg} />
         ))}
