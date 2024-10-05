@@ -51,7 +51,7 @@ const Home = () => {
     // Add more packages as needed
   ];
   return (
-    <div className='min-h-screen  flex flex-col items-center bg-white-200'>
+    <div className='min-h-screen mt-10  flex flex-col items-center bg-white-200'>
 
     <div className='relative' > 
       <img src={image} alt="" />

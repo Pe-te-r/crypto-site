@@ -50,7 +50,7 @@ const About = () => {
     // Add more cards as needed
   ];
   return (
-    <div className='bg-slate-200 min-h-screen mt-0 p-3 '>
+    <div className=' min-h-screen mt-0 p-3 '>
 
       <div>
 

@@ -27,10 +27,10 @@ const NavBar = () => {
   };
 
   return (
-    <div>
+      <div className='m-0 p-2 h-[60px]  bg-gray-800 text-white shadow-sm'>
+    <div className='items-center flex justify-around'>
       {/* NavBar */}
-      <div className='m-0 p-2 h-[60px] items-center flex bg-[rgba(242,255,66,0.78)] shadow-sm mb-2 justify-between lg:w-3/4 mx-auto md:w-full'>
-        <h3 className='font-bold text-[20px]'>Peer Mining</h3>
+        <Link to='/' className='font-bold text-[20px] cursor-pointer'>Peer Mining</Link>
         {/* Menu Icon for smaller screens */}
         <div className='md:hidden cursor-pointer' onClick={toggleMenu}>
           <IoMenuSharp size={30} />

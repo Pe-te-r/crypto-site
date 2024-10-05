@@ -10,7 +10,7 @@ const Layout = () => {
       <NavBar />
       
       {/* Ensure content takes up all available vertical space */}
-      <div className="flex-grow p-4 pt-0 h-full">
+      <div className="flex-grow p-4 pt-0 h-full bg-slate-300">
         <Outlet />
       </div>
 
