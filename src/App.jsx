@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import Layout from './components/Layout';
 import About from './pages/About';
+import Contact from './pages/Contact';
 
 // Define your routes with Layout as the wrapper
 const router = createBrowserRouter([
@@ -17,7 +18,12 @@ const router = createBrowserRouter([
       {
         path:'/about',
         element: <About/>
+      },
+      {
+        path:'/contact',
+        element: <Contact/>
       }
+
       // {
       //   path: '/about',
       //   element: <About />, // About Us is displayed under the NavBar
