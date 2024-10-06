@@ -53,7 +53,7 @@ const Home = () => {
   return (
     <div className='min-h-screen mt-10  flex flex-col items-center bg-white-200'>
 
-    <div className='relative w-2/4 ' > 
+    <div className='relative w-2/3 border border-black flex flex-col justify-center' > 
       <img src={image} alt="" className='w-full h-[650px] blur-sm'/>
 
     <div className='absolute top-2 left-1 bg-yellow-500 p-3 rounded-md'>
@@ -62,7 +62,7 @@ const Home = () => {
     <div className='absolute bottom-1 right-1'>
       <button className='btn-primary bg-blue-500 p-2 font-mono rounded-md'>Explore plans</button>
     </div>
-    <div className='shadow-lg rounded-md p-2 w-3/4  flex flex-col bg-gray-200 absolute left-0 top-1/3 '>
+    <div className='shadow-lg rounded-md p-2 w-2/3  flex flex-col bg-gray-200 absolute right-0 top-1/3 '>
         <p className='font-bold text-center font-sans'>Enjoy professional-grade mining machines with full maintenance support, optimized for maximum returns.</p>
         <div className='m-2 mb-0 flex items-center place-content-center'>
           <input type="Email" className='border-2 rounded-md m-1 outline-none p-2 w-2/3 font-serif' placeholder='Email'/>
