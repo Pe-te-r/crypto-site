@@ -28,6 +28,15 @@ const Account = () => {
           </div>
         </div>
       </div>
+      <div className='flex w-full justify-center gap-3 p-3 mx-auto mt-5'>
+        <button className='w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition'>
+          Add a New Mining Package
+        </button>
+      </div>
+      {/* a table to display the invited and registerd with your code */}
+      <div className='flex w-full justify-center gap-3 p-3 mx-auto mt-5'>
+          
+      </div>
     </div>
   )
 }
