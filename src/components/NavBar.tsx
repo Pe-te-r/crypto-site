@@ -27,8 +27,8 @@ const NavBar = () => {
   };
 
   return (
-      <div className='m-0 p-2 h-[60px]  bg-gray-800 text-white shadow-sm'>
-    <div className='items-center flex justify-around'>
+      <div className='m-0 p-2 h-[60px]  bg-gray-800 text-white shadow-sm z-20'>
+    <div className='items-center flex lg:justify-around  justify-between'>
       {/* NavBar */}
         <Link to='/' className='font-bold text-[20px] cursor-pointer'>Peer Mining</Link>
         {/* Menu Icon for smaller screens */}
@@ -46,11 +46,11 @@ const NavBar = () => {
 
       {/* Collapsible Menu for smaller screens */}
       <div
-        className={`md:hidden transition-all duration-300 ease-in-out ${
+        className={`md:hidden transition-all duration-300 ease-in-out min-w-full${
           isMenuOpen ? 'max-h-screen' : 'max-h-0 overflow-hidden'
         }`}
       >
-        <div className="flex flex-col bg-[#D9D9D9] p-2 space-y-4">
+        <div className="flex flex-col bg-gray-700 p-2 space-y-4 mt-3 w-full">
           <Link to='/'
             className='bg-white text-black py-2 px-4 w-full text-center rounded-lg hover:bg-blue-100 hover:shadow-md transition'
           >
