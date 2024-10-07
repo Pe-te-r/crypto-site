@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Account from './pages/Account';
+import Register from './pages/Register';
 
 // Define your routes with Layout as the wrapper
 const router = createBrowserRouter([
@@ -27,7 +28,11 @@ const router = createBrowserRouter([
       {
         path:'/account',
         element: <Account/>
-      }
+      },
+      {
+        path:'/register',
+        element: <Register/>
+      },
 
       // {
       //   path: '/about',
