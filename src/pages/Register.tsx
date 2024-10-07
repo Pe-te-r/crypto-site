@@ -173,7 +173,7 @@ const Register = () => {
             placeholder="Enter your password"
           />
           <span
-            className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+            className="absolute  top-1/2 right-3 flex items-center cursor-pointer"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -198,7 +198,7 @@ const Register = () => {
             placeholder="Confirm your password"
           />
           <span
-            className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+            className="absolute  right-3 top-1/2 flex items-center cursor-pointer"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
           >
             {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}

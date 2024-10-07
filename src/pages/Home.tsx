@@ -51,7 +51,7 @@ const Home = () => {
     // Add more packages as needed
   ];
   return (
-    <div className='min-h-screen mt-10  flex flex-col items-center bg-white-200'>
+    <div className='min-h-screen pt-6 mt-3  flex flex-col items-center bg-white'>
 
     <div className='relative w-2/3 border border-black flex flex-col justify-center' > 
       <img src={image} alt="" className='w-full h-[650px] blur-sm'/>
