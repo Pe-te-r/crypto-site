@@ -1,13 +1,17 @@
 // src/components/Register.jsx
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useRegisterUserMutation } from '../api/slice/usersSlice';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Register = () => {
+  const [registerUser, {data, isLoading, isSuccess, isError }] = useRegisterUserMutation();
+
   // State for form fields
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    first_Name: '',
+    last_Name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -33,11 +37,11 @@ const Register = () => {
   const validate = () => {
     const newErrors: any = {};
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
+    if (!formData.first_Name.trim()) {
+      newErrors.first_Name = 'First name is required';
     }
 
-    if (!formData.lastName.trim()) {
+    if (!formData.last_Name.trim()) {
       newErrors.lastName = 'Last name is required';
     }
 
@@ -65,28 +69,44 @@ const Register = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
     if (validate()) {
-      // Handle successful registration logic here
-      console.log('Registered Successfully:', formData);
-      setSuccess('Registration successful! Please check your email to confirm.');
+      await registerUser(formData)
 
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      });
-
+      
       // Clear errors
       setErrors({});
     }
   };
+  
+  useEffect(()=>{
+    if(isSuccess){
+      if(data?.id){
+
+        setSuccess('Registration successful! You can now log in.')
+        
+        // Reset form
+        setFormData({
+          first_Name: '',
+          last_Name: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+        });
+      }else if(data?.message){
+        setSuccess(data.message)
+      }
+      else{
+        setSuccess('Registration failed. Please try again.')
+      }
+
+    }
+  },[data,isSuccess])
+
 
   return (
     <div className="w-full max-w-lg bg-white rounded-lg shadow-md p-8 mx-auto mt-7">
@@ -99,43 +119,44 @@ const Register = () => {
       )}
 
       <form onSubmit={handleSubmit} noValidate>
-        {/* First Name */}
-        <div className="mb-4">
-          <label htmlFor="firstName" className="block text-gray-700 font-medium mb-2">
-            First Name
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border ${
-              errors.firstName ? 'border-red-500' : 'border-gray-300'
-            } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            placeholder="Enter your first name"
-          />
-          {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
-        </div>
+       {/* First Name */}
+<div className="mb-4">
+  <label htmlFor="firstName" className="block text-gray-700 font-medium mb-2">
+    First Name
+  </label>
+  <input
+    type="text"
+    id="firstName"
+    name="first_Name"  
+    value={formData.first_Name}
+    onChange={handleChange}
+    className={`w-full px-3 py-2 border ${
+      errors.first_Name ? 'border-red-500' : 'border-gray-300'
+    } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+    placeholder="Enter your first name"
+  />
+  {errors.first_Name && <p className="text-red-500 text-sm mt-1">{errors.first_Name}</p>}
+</div>
 
-        {/* Last Name */}
-        <div className="mb-4">
-          <label htmlFor="lastName" className="block text-gray-700 font-medium mb-2">
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            className={`w-full px-3 py-2 border ${
-              errors.lastName ? 'border-red-500' : 'border-gray-300'
-            } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            placeholder="Enter your last name"
-          />
-          {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
-        </div>
+{/* Last Name */}
+<div className="mb-4">
+  <label htmlFor="lastName" className="block text-gray-700 font-medium mb-2">
+    Last Name
+  </label>
+  <input
+    type="text"
+    id="lastName"
+    name="last_Name" 
+    value={formData.last_Name}
+    onChange={handleChange}
+    className={`w-full px-3 py-2 border ${
+      errors.last_Name ? 'border-red-500' : 'border-gray-300'
+    } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+    placeholder="Enter your last name"
+  />
+  {errors.last_Name && <p className="text-red-500 text-sm mt-1">{errors.last_Name}</p>}
+</div>
+
 
         {/* Email */}
         <div className="mb-4">
@@ -214,7 +235,10 @@ const Register = () => {
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
           >
-            Register
+            {
+              isLoading ?
+              <LoadingSpinner/>:"Register"
+            }
           </button>
         </div>
       </form>

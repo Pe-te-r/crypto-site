@@ -1,6 +1,7 @@
 import React from 'react'
 import image from '../assets/bg.jpeg'
 import RentalCard from '../components/RentalCard';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const packagesData = [
@@ -70,7 +71,7 @@ const Home = () => {
             Login
           </button>
         </div>
-        <p className='text-center text-red-700 cursor-pointer'>don't have an account?</p>
+        <Link to='/register' className='text-center text-red-700 cursor-pointer'>don't have an account?</Link>
         <div className='mt-3 mb-3'>
           <p className='font-bold text-center'>Rent powerful mining machines remotely and start earning cryptocurrency without the need for expensive hardware or technical knowledge.</p>
         </div>
