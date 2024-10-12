@@ -7,6 +7,7 @@ import Contact from './pages/Contact';
 import Account from './pages/Account';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Define your routes with Layout as the wrapper
 const router = createBrowserRouter([

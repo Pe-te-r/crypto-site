@@ -265,6 +265,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useRegisterUserMutation } from '../api/slice/usersSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '../context_fi/ToastContext';
 
 
 const Register = () => {
@@ -282,6 +283,8 @@ const Register = () => {
 
   // State for form errors
   const [errors, setErrors] = useState<any>({});
+
+  const {showToast} = useToast();
 
   // State for password visibility
   const [showPassword, setShowPassword] = useState(false);
@@ -363,6 +366,7 @@ const Register = () => {
           password: '',
           confirmPassword: '',
         });
+        showToast('Registration successful! You can now log in.','success')
         navigate('/login');
       } else if (data?.message) {
         setMessage({
