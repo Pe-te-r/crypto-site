@@ -18,7 +18,6 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      
     });
   };
 
