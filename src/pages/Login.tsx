@@ -1,8 +1,11 @@
 // src/components/Login.jsx
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLoginUserMutation } from '../api/slice/usersSlice';
 
 const Login = () => {
+  const [loginUser, { data, isLoading, isSuccess, isError }] = useLoginUserMutation();
+
   // State for form fields
   const [formData, setFormData] = useState({
     email: '',
@@ -12,6 +15,7 @@ const Login = () => {
 
   // State for form errors
   const [errors, setErrors] = useState<any>({});
+  const [code,setCode]= useState<boolean>(false)
 
   // Handle input change
   const handleChange = (e) => {
@@ -32,7 +36,7 @@ const Login = () => {
       newErrors.password = 'Password is required';
     }
 
-    if (!formData.code) {
+    if (!formData.code && code) {
       newErrors.code = 'Code is required';
     }
 
@@ -46,6 +50,7 @@ const Login = () => {
 
     if (validate()) {
       console.log('Login Data:', formData);
+      loginUser(formData);
       // Here you can add logic to send formData to your API
 
       // Reset form
@@ -59,6 +64,19 @@ const Login = () => {
       setErrors({});
     }
   };
+  useEffect(()=>{
+    if(isSuccess){
+      console.log(data)
+      if(data?.message){
+        if(data.message == 'code'){
+          setCode(true)
+        }
+        
+      }else if(data?.error){
+
+      }
+    }
+  },[isSuccess,data])
 
   return (
     <div className="w-full max-w-sm bg-white rounded-lg shadow-md p-8 mx-auto mt-7">
@@ -104,6 +122,8 @@ const Login = () => {
         </div>
 
         {/* Code */}
+        {
+          code &&
         <div className="mb-4">
           <label htmlFor="code" className="block text-gray-700 font-medium mb-2">
             Code
@@ -116,11 +136,12 @@ const Login = () => {
             onChange={handleChange}
             className={`w-full px-3 py-2 border ${
               errors.code ? 'border-red-500' : 'border-gray-300'
-            } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            placeholder="Enter your code"
-          />
+              } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              placeholder="Enter your code"
+              />
           {errors.code && <p className="text-red-500 text-sm mt-1">{errors.code}</p>}
         </div>
+        }
 
         {/* Submit Button */}
         <div className="mb-4">
