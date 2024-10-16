@@ -12,9 +12,13 @@ interface LoginData {
 // Define the type for user data
 interface User {
   id: string;
-  name: string;
+  first_Name: string;
+  last_Name: string;
   email: string;
-  // Add other user fields as necessary
+  created_at: string;
+  account?: {
+    balance: string;
+  };
 }
 const getToken = () => {
   const { data } = useLocalStorageContext(); // Access token from context
