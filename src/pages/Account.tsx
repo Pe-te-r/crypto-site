@@ -1,7 +1,11 @@
 import React from 'react';
 import image from "../assets/profile.jpeg";
+import { useLocalStorageContext } from '../context_fi/LocalStorageContext';
 
 const Account = () => {
+  const {  data } = useLocalStorageContext();
+  console.log(data.token)
+
   // Mock data for promo code users
   const promoUsers = [
     { id: 1, name: 'Alice Johnson', email: 'alice@example.com', registrationDate: '2024-04-15' },
