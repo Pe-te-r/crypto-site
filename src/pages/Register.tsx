@@ -16,6 +16,7 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    register_code: '5816JoEX',
   });
   const navigate = useNavigate();
 
@@ -104,6 +105,7 @@ const Register = () => {
           email: '',
           password: '',
           confirmPassword: '',
+          register_code:'',
         });
         showToast('Registration successful! You can now log in.','success')
         navigate('/login');
