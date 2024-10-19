@@ -5,6 +5,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '../context_fi/ToastContext';
 import { useLocalStorageContext } from '../context_fi/LocalStorageContext';
+// import { useAuth } from '../context_fi/AuthContext';
 
 const Login = () => {
   const [loginUser, { data, isLoading, isSuccess, isError, error }] = useLoginUserMutation();
@@ -13,6 +14,7 @@ const Login = () => {
   const { showToast } = useToast();
 
   const {  setData } = useLocalStorageContext();
+  // const { setUser } = useAuth();
 
   // State for form fields
   const [formData, setFormData] = useState({

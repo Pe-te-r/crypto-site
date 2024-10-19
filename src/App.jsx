@@ -8,6 +8,7 @@ import Account from './pages/Account';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import 'react-toastify/dist/ReactToastify.css';
+import Rent from './pages/Rent';
 
 // Define your routes with Layout as the wrapper
 const router = createBrowserRouter([
@@ -39,15 +40,10 @@ const router = createBrowserRouter([
         path:'/login',
         element: <Login/>
       },
-
-      // {
-      //   path: '/about',
-      //   element: <About />, // About Us is displayed under the NavBar
-      // },
-      // {
-      //   path: '/contact',
-      //   element: <Contact />, // Contact is displayed under the NavBar
-      // },
+      {
+        path:'/rent/:index',
+        element: <Rent/>
+      },
     ],
   },
 ]);

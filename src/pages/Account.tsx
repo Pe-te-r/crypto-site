@@ -164,8 +164,7 @@ const Account = () => {
                 <tbody>
                   {promoUsers && promoUsers.map((user,index)  => (
                     <tr key={index} className='text-center hover:bg-gray-100'>
-                      <td className='py-2 px-4 border-b'>{index + 1}</td>
-                      
+                      <td className='py-2 px-4 border-b'>{index + 1}</td>                      
                       <td className='py-2 px-4 border-b'>{user['user'].first_Name}{' '}{user['user'].last_Name}</td>
                       <td className='py-2 px-4 border-b'>{user['user'].email}</td>
                       <td className='py-2 px-4 border-b'>{user['user'].created_at}</td>

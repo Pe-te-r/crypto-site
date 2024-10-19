@@ -2,55 +2,10 @@ import React from 'react'
 import image from '../assets/bg.jpeg'
 import RentalCard from '../components/RentalCard';
 import { Link } from 'react-router-dom';
+import { packagesData } from './servers';
 
 const Home = () => {
-  const packagesData = [
-    {
-      machineType: "Standard Mining Machine",
-      dailyRate: "10",
-      estimatedMining: "100",
-      bitcoinValue: "0.0000125", // This is just an example; calculate dynamically
-      packageDetails: "This machine is perfect for beginners looking to start mining crypto easily."
-    },{
-      machineType: "Standard Mining Machine",
-      dailyRate: "10",
-      estimatedMining: "100",
-      bitcoinValue: "0.0000125", // This is just an example; calculate dynamically
-      packageDetails: "This machine is perfect for beginners looking to start mining crypto easily."
-    },{
-      machineType: "Standard Mining Machine",
-      dailyRate: "10",
-      estimatedMining: "100",
-      bitcoinValue: "0.0000125", // This is just an example; calculate dynamically
-      packageDetails: "This machine is perfect for beginners looking to start mining crypto easily."
-    },{
-      machineType: "Standard Mining Machine",
-      dailyRate: "10",
-      estimatedMining: "100",
-      bitcoinValue: "0.0000125", // This is just an example; calculate dynamically
-      packageDetails: "This machine is perfect for beginners looking to start mining crypto easily."
-    },
-    {
-      machineType: "Advanced Mining Machine",
-      dailyRate: "20",
-      estimatedMining: "200",
-      bitcoinValue: "0.000025", // This is just an example; calculate dynamically
-      packageDetails: "An advanced machine for serious miners. High efficiency and output."
-    },{
-      machineType: "Advanced Mining Machine",
-      dailyRate: "20",
-      estimatedMining: "200",
-      bitcoinValue: "0.000025", // This is just an example; calculate dynamically
-      packageDetails: "An advanced machine for serious miners. High efficiency and output."
-    },{
-      machineType: "Advanced Mining Machine",
-      dailyRate: "20",
-      estimatedMining: "200",
-      bitcoinValue: "0.000025", // This is just an example; calculate dynamically
-      packageDetails: "An advanced machine for serious miners. High efficiency and output."
-    },
-    // Add more packages as needed
-  ];
+ 
   return (
     <div className='min-h-screen pt-6 mt-3  flex flex-col items-center bg-white'>
 
@@ -81,7 +36,7 @@ const Home = () => {
       <h1 className="text-center text-2xl font-bold mb-6">Rental Packages</h1>
       <div className="flex w-3/4  mx-auto flex-wrap justify-center">
         {packagesData.map((pkg, index) => (
-          <RentalCard key={index} {...pkg} />
+          <RentalCard key={index} index={index} {...pkg}/>
         ))}
       </div>
       </div>
