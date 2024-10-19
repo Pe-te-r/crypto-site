@@ -19,17 +19,13 @@ interface UserData {
 const Account = () => {
   const { data: storageData } = useLocalStorageContext();
 
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<UserData |  any>(null);
 
   // Fetch user data using the stored ID from localStorage
   const { data, error, isSuccess, isLoading } = useGetUserByIdQuery(storageData?.id);
 
   // Mock data for promo code users and recent activities
-  const promoUsers = [
-    { id: 1, name: 'Alice Johnson', email: 'alice@example.com', registrationDate: '2024-04-15' },
-    { id: 2, name: 'Bob Smith', email: 'bob@example.com', registrationDate: '2024-04-16' },
-    { id: 3, name: 'Charlie Brown', email: 'charlie@example.com', registrationDate: '2024-04-17' },
-  ];
+  const [promoUsers,setPromoUsers]=useState<any>([])
 
   const recentActivities = [
     { id: 1, activity: 'Purchased Advanced Mining Machine', date: '2024-04-20' },
@@ -39,16 +35,23 @@ const Account = () => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      console.log(data); // Inspect the structure of data
       // Adjust this based on your data structure
       if (Array.isArray(data)) {
         setUserData(data[0]); // If data is an array
+
+        // setPromoUsers()
       } else {
         setUserData(data); // If data is an object
       }
     }
   }, [isSuccess, data]);
 
+  useEffect(()=>{
+    setPromoUsers(userData?.promoCode?.users)
+    console.log(userData)
+  },[userData])
+  
+  // console.log(userData?.promoCode?.users[0]['user'])
   // Loading spinner component
   const Loader = () => (
     <div className="flex justify-center items-center min-h-screen">
@@ -72,7 +75,7 @@ const Account = () => {
         <>
           {/* Profile Section */}
           <div className='bg-white shadow rounded-lg p-6 mb-6'>
-            <div className='flex flex-col md:flex-row items-center md:items-start'>
+            <div className='flex flex-col md:flex-row items-center md:items-start relative'>
               <img src={image} className='w-32 h-32 rounded-full object-cover' alt="Profile" />
               <div className='mt-4 md:mt-0 md:ml-6 text-center md:text-left'>
                 <h1 className='text-2xl font-bold'>
@@ -80,6 +83,9 @@ const Account = () => {
                 </h1>
                 <p className='text-gray-600'>Email: {userData.email}</p>
                 <p className='text-gray-600'>Member since: {new Date(userData.created_at).toLocaleDateString()}</p>
+              </div>
+              <div className='right-1 absolute'>
+                <p><span className='font-semibold'>Invitation Code: </span><span className='ml-1 font-mono'>{userData?.promoCode?.promo_code}</span></p>
               </div>
             </div>
           </div>
@@ -156,12 +162,13 @@ const Account = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {promoUsers.map(user => (
-                    <tr key={user.id} className='text-center hover:bg-gray-100'>
-                      <td className='py-2 px-4 border-b'>{user.id}</td>
-                      <td className='py-2 px-4 border-b'>{user.name}</td>
-                      <td className='py-2 px-4 border-b'>{user.email}</td>
-                      <td className='py-2 px-4 border-b'>{user.registrationDate}</td>
+                  {promoUsers && promoUsers.map((user,index)  => (
+                    <tr key={index} className='text-center hover:bg-gray-100'>
+                      <td className='py-2 px-4 border-b'>{index + 1}</td>
+                      
+                      <td className='py-2 px-4 border-b'>{user['user'].first_Name}{' '}{user['user'].last_Name}</td>
+                      <td className='py-2 px-4 border-b'>{user['user'].email}</td>
+                      <td className='py-2 px-4 border-b'>{user['user'].created_at}</td>
                     </tr>
                   ))}
                 </tbody>
