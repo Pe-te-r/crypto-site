@@ -5,11 +5,13 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '../context_fi/ToastContext';
 import { useLocalStorageContext } from '../context_fi/LocalStorageContext';
-// import { useAuth } from '../context_fi/AuthContext';
+import { useAuth } from '../components/ProtectedRoute';
 
 const Login = () => {
   const [loginUser, { data, isLoading, isSuccess, isError, error }] = useLoginUserMutation();
   const navigate = useNavigate();
+  const { loginUserNow } = useAuth();
+
   const location = useLocation();
   const { showToast } = useToast();
 
@@ -110,6 +112,7 @@ const Login = () => {
         code: '',
       });
         navigate('/'); // Redirect to home page
+        loginUserNow('/user')
       }
     }
 

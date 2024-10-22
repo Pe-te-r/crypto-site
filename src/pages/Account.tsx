@@ -13,6 +13,7 @@ interface UserData {
   account?: {
     balance: string;
   };
+  error?: string
   // Add other fields as necessary
 }
 
@@ -34,21 +35,24 @@ const Account = () => {
   ];
 
   useEffect(() => {
+    console.log(data )
     if (isSuccess && data) {
       // Adjust this based on your data structure
       if (Array.isArray(data)) {
         setUserData(data[0]); // If data is an array
 
         // setPromoUsers()
-      } else {
+      }else if(data?.error){
+        console.log('error here')
+      }else {
         setUserData(data); // If data is an object
       }
     }
-  }, [isSuccess, data]);
+   
+  }, [isSuccess, data,error]);
 
   useEffect(()=>{
     setPromoUsers(userData?.promoCode?.users)
-    console.log(userData)
   },[userData])
   
   // console.log(userData?.promoCode?.users[0]['user'])

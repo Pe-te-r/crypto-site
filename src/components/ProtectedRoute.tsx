@@ -1,24 +1,29 @@
-// // src/components/ProtectedRoute.js
-// import React from 'react';
-// import { Navigate } from 'react-router-dom';
-// import { useAuth } from '../context_fi/AuthContext';
+// AuthContext.tsx
+import React, { createContext, useContext, useState } from 'react';
 
-// const ProtectedRoute = ({ element, roles }) => {
-//   const { user } = useAuth();
+// Create the AuthContext
+const AuthContext = createContext<any>(null);
 
-//   // Check if user is authenticated and has the required role
-//   const isAuthenticated = user !== null;
-//   const hasRequiredRole = roles ? roles.includes(user.role) : true;
+// Create a custom hook to use the AuthContext
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
 
-//   if (!isAuthenticated) {
-//     return <Navigate to="/login" />;
-//   }
+// Create the AuthProvider component
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<any>(null); // Define user state
 
-//   if (!hasRequiredRole) {
-//     return <Navigate to="/" />; // Redirect to home if user does not have access
-//   }
+  const loginUserNow = (userData: any) => {
+    setUser(userData); // Set user data upon login
+  };
 
-//   return element; // Render the protected component
-// };
+  const logoutUserNow = () => {
+    setUser(null); // Clear user data upon logout
+  };
 
-// export default ProtectedRoute;
+  return (
+    <AuthContext.Provider value={{ user, loginUserNow, logoutUserNow }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

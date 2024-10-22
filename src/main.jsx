@@ -6,16 +6,19 @@ import { Provider } from 'react-redux'
 import { store } from './api/store'
 import { ToastProvider } from './context_fi/ToastContext'
 import { LocalStorageProvider } from './context_fi/LocalStorageContext'
+import { AuthProvider } from './components/ProtectedRoute'
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
+    <AuthProvider>
     <ToastProvider>
     <LocalStorageProvider>
       <App />
     </LocalStorageProvider>
     </ToastProvider>
+    </AuthProvider>
     </Provider>
   </StrictMode>,
 )

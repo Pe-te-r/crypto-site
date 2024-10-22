@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import 'react-toastify/dist/ReactToastify.css';
 import Rent from './pages/Rent';
+import ProtectedRoute from './AuthContext';
 
 // Define your routes with Layout as the wrapper
 const router = createBrowserRouter([
@@ -28,10 +29,8 @@ const router = createBrowserRouter([
         path:'/contact',
         element: <Contact/>
       },
-      {
-        path:'/account',
-        element: <Account/>
-      },
+      {path:'/account',
+        element:<ProtectedRoute element={Account } role='user'/>},
       {
         path:'/register',
         element: <Register/>
