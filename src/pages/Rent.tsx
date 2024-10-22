@@ -44,7 +44,7 @@ const Rent = () => {
         </select>
       </div>
 
-      <p className="mt-4">Total Cost: <strong>{selectedPackage.dailyRate * days} KES</strong></p>
+      <p className="mt-4">Total Cost: <strong>{Number(selectedPackage.dailyRate )* days} KES</strong></p>
       
       <button className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition">
         Confirm Rental
