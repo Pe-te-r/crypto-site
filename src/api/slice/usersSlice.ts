@@ -59,6 +59,12 @@ export const usersSlice = createApi({
         body: loginData,
       }),
     }),
+    getValidation:builder.query<any,any>({
+      query:()=>({
+        url:'/ok',
+        method:'GET',
+      })
+    }),
     getUserById: builder.query<User, string>({
       query: (id) => ({
         url: `/users/${id}`,  // Your user details API endpoint
@@ -69,7 +75,7 @@ export const usersSlice = createApi({
 });
 
 // Export hooks for the defined endpoints
-export const { useRegisterUserMutation, useLoginUserMutation, useGetUserByIdQuery } = usersSlice;
+export const { useRegisterUserMutation, useLoginUserMutation, useGetUserByIdQuery,useGetValidationQuery } = usersSlice;
 
 
 

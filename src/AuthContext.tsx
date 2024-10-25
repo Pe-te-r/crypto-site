@@ -1,7 +1,8 @@
 // ProtectedRoute.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from './components/ProtectedRoute';
+import { useLocalStorageContext } from './context_fi/LocalStorageContext';
 
 interface ProtectedRouteProps {
   element: React.ElementType; // Component to render
@@ -11,19 +12,29 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ element: Component, role, ...rest }: ProtectedRouteProps) => {
   const { user } = useAuth(); // Access user from context
+  // const { data: storageData } = useLocalStorageContext(); 
+ 
 
-  // Check if the user is logged in
-  if (!user) {
+  console.log(user)
+   // Check if the user is logged in
+  if (!user.role) {
     return <Navigate to="/" />;
   }
 
-  // Determine where to redirect based on role
   let to;
-  if (user.role === 'admin') {
-    to = '/admin';
-  } else if (user.role !== role) {
-    to = '/';
-  }
+  useEffect(()=>{
+    if(user){
+
+      
+      // Determine where to redirect based on role
+      if (user.role === 'admin') {
+        to = '/admin';
+      } else if (user.role !== role) {
+        to = '/';
+      }
+    }
+  },[role])
+
 
   // If the user's role matches the required role, render the component
   if (user.role === role) {
@@ -34,3 +45,4 @@ const ProtectedRoute = ({ element: Component, role, ...rest }: ProtectedRoutePro
 };
 
 export default ProtectedRoute;
+

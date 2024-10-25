@@ -4,13 +4,14 @@ import React, { createContext, useState, useEffect } from 'react';
 interface LocalStorageContextType {
   data: any;
   setData: (data: any) => void;
+  removeData: () => void;
 }
 
 // Create the context with a default value (null or a default object)
 const LocalStorageContext = createContext<LocalStorageContextType | null>(null);
 
 // Create the provider component
-export const LocalStorageProvider = ({ children }) => {
+export const LocalStorageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [data, setData] = useState(() => {
     const savedData = localStorage.getItem('myData');
     return savedData ? JSON.parse(savedData) : null;
@@ -22,8 +23,14 @@ export const LocalStorageProvider = ({ children }) => {
     }
   }, [data]);
 
+  // Function to remove data from local storage and reset state
+  const removeData = () => {
+    localStorage.removeItem('myData');
+    setData('');
+  };
+
   return (
-    <LocalStorageContext.Provider value={{ data, setData }}>
+    <LocalStorageContext.Provider value={{ data, setData, removeData }}>
       {children}
     </LocalStorageContext.Provider>
   );

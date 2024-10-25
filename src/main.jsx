@@ -11,14 +11,14 @@ import { AuthProvider } from './components/ProtectedRoute'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <LocalStorageProvider>
     <Provider store={store}>
     <AuthProvider>
     <ToastProvider>
-    <LocalStorageProvider>
       <App />
-    </LocalStorageProvider>
     </ToastProvider>
     </AuthProvider>
     </Provider>
+    </LocalStorageProvider>
   </StrictMode>,
 )

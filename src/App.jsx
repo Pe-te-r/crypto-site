@@ -30,7 +30,9 @@ const router = createBrowserRouter([
         element: <Contact/>
       },
       {path:'/account',
-        element:<ProtectedRoute element={Account } role='user'/>},
+        // element:<ProtectedRoute element={Account } role='user'/>
+        element: <Account/>
+      },
       {
         path:'/register',
         element: <Register/>

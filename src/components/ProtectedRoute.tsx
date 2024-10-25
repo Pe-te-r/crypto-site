@@ -1,28 +1,42 @@
 // AuthContext.tsx
 import React, { createContext, useContext, useState } from 'react';
+import { useLocalStorageContext } from '../context_fi/LocalStorageContext';
 
-// Create the AuthContext
-const AuthContext = createContext<any>(null);
+// Define the AuthContext type
+interface AuthContextType {
+  user: { role: string | undefined };
+  logoutUserNow: () => void;
+}
 
-// Create a custom hook to use the AuthContext
+// Create the AuthContext with a default value
+const AuthContext = createContext<AuthContextType | null>(null);
+
+// Custom hook to use the AuthContext
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
 
 // Create the AuthProvider component
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<any>(null); // Define user state
+  const { data: storageData, removeData } = useLocalStorageContext();
 
-  const loginUserNow = (userData: any) => {
-    setUser(userData); // Set user data upon login
-  };
+  // Define user role from storageData
+  const role = storageData ? storageData.logged : undefined;
+  console.log(storageData)
+  const [user, setUser] = useState({ role }); // Define user state
 
+  // Function to logout and clear user data
   const logoutUserNow = () => {
-    setUser(null); // Clear user data upon logout
+    removeData();
+    setUser({ role: undefined }); // Clear user data upon logout
   };
 
   return (
-    <AuthContext.Provider value={{ user, loginUserNow, logoutUserNow }}>
+    <AuthContext.Provider value={{ user, logoutUserNow }}>
       {children}
     </AuthContext.Provider>
   );

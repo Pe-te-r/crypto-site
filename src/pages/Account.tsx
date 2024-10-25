@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import image from "../assets/profile.jpeg";
 import { useLocalStorageContext } from '../context_fi/LocalStorageContext';
-import { useGetUserByIdQuery } from '../api/slice/usersSlice';
+import { useGetUserByIdQuery, useGetValidationQuery } from '../api/slice/usersSlice';
+import { useAuth } from '../components/ProtectedRoute';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 // Define TypeScript interfaces for better type safety
 interface UserData {
@@ -18,12 +20,20 @@ interface UserData {
 }
 
 const Account = () => {
-  const { data: storageData } = useLocalStorageContext();
+  const { data: storageData,removeData } = useLocalStorageContext();
+  // const { data:okData, error:okError, isSuccess:okSuccess } = useGetValidationQuery(null);
+
+  // const { logoutUserNow} =useAuth()
+
 
   const [userData, setUserData] = useState<UserData |  any>(null);
+  const info_data = localStorage.getItem("myData"); // Replace "myData" with the key of the item you want to retrieve
+
+// If the data is JSON, parse it to convert it back to an object
+const parsedData = info_data ? JSON.parse(info_data) : null;
 
   // Fetch user data using the stored ID from localStorage
-  const { data, error, isSuccess, isLoading } = useGetUserByIdQuery(storageData?.id);
+  const { data, error, isSuccess, isLoading } = useGetUserByIdQuery(parsedData?.id);
 
   // Mock data for promo code users and recent activities
   const [promoUsers,setPromoUsers]=useState<any>([])
@@ -35,7 +45,7 @@ const Account = () => {
   ];
 
   useEffect(() => {
-    console.log(data )
+    // console.log(data )
     if (isSuccess && data) {
       // Adjust this based on your data structure
       if (Array.isArray(data)) {
@@ -43,20 +53,24 @@ const Account = () => {
 
         // setPromoUsers()
       }else if(data?.error){
-        console.log('error here')
+        if(data.error=='expired' || data.error =='no token'){
+          navigate('/login')
+          localStorage.clear();
+        }
+        // console.log('error here')
       }else {
         setUserData(data); // If data is an object
       }
     }
    
   }, [isSuccess, data,error]);
+  const navigate = useNavigate()
+  
 
   useEffect(()=>{
     setPromoUsers(userData?.promoCode?.users)
   },[userData])
-  
-  // console.log(userData?.promoCode?.users[0]['user'])
-  // Loading spinner component
+
   const Loader = () => (
     <div className="flex justify-center items-center min-h-screen">
       <div className="animate-spin inline-block w-8 h-8 border-4 border-t-transparent border-blue-500 rounded-full" role="status">

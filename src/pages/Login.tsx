@@ -10,7 +10,6 @@ import { useAuth } from '../components/ProtectedRoute';
 const Login = () => {
   const [loginUser, { data, isLoading, isSuccess, isError, error }] = useLoginUserMutation();
   const navigate = useNavigate();
-  const { loginUserNow } = useAuth();
 
   const location = useLocation();
   const { showToast } = useToast();
@@ -105,14 +104,14 @@ const Login = () => {
       } else if (data?.user) {
         showToast('Login successful!', 'success');
         // Reset form fields
-        setData({id:data.user.id,token:data.user.token})
-      setFormData({
-        email: '',
-        password: '',
+        setFormData({
+          email: '',
+          password: '',
         code: '',
       });
         navigate('/'); // Redirect to home page
-        loginUserNow('/user')
+        // loginUserNow({role:'user'})
+        setData({id:data.user.id,token:data.user.token,logged:'user'});
       }
     }
 
