@@ -71,11 +71,18 @@ export const usersSlice = createApi({
         method: 'GET',
       }),
     }),
+    bookServer: builder.mutation<any,any>({
+      query: (serverData) => ({
+        url: '/book',  // Your book server API endpoint
+        method: 'POST',
+        body: serverData,
+      }),
+    })
   }),
 });
 
 // Export hooks for the defined endpoints
-export const { useRegisterUserMutation, useLoginUserMutation, useGetUserByIdQuery,useGetValidationQuery } = usersSlice;
+export const { useRegisterUserMutation, useLoginUserMutation, useGetUserByIdQuery,useGetValidationQuery,useBookServerMutation } = usersSlice;
 
 
 

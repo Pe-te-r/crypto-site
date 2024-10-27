@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import image from "../assets/profile.jpeg";
 import { useLocalStorageContext } from '../context_fi/LocalStorageContext';
 import { useGetUserByIdQuery, useGetValidationQuery } from '../api/slice/usersSlice';
-import { useAuth } from '../components/ProtectedRoute';
-import { Navigate, useNavigate } from 'react-router-dom';
+import {  Link, useNavigate } from 'react-router-dom';
 
 // Define TypeScript interfaces for better type safety
 interface UserData {
@@ -20,23 +19,19 @@ interface UserData {
 }
 
 const Account = () => {
-  const { data: storageData,removeData } = useLocalStorageContext();
-  // const { data:okData, error:okError, isSuccess:okSuccess } = useGetValidationQuery(null);
-
-  // const { logoutUserNow} =useAuth()
-
 
   const [userData, setUserData] = useState<UserData |  any>(null);
-  const info_data = localStorage.getItem("myData"); // Replace "myData" with the key of the item you want to retrieve
+  // const info_data = localStorage.getItem("myData"); // Replace "myData" with the key of the item you want to retrieve
 
 // If the data is JSON, parse it to convert it back to an object
-const parsedData = info_data ? JSON.parse(info_data) : null;
+// const parsedData = info_data ? JSON.parse(info_data) : null;
+const { data: storageData, removeData } = useLocalStorageContext();
 
   // Fetch user data using the stored ID from localStorage
-  const { data, error, isSuccess, isLoading } = useGetUserByIdQuery(parsedData?.id);
+  const { data, error, isSuccess, isLoading } = useGetUserByIdQuery(storageData?.id,{refetchOnFocus:true,refetchOnReconnect:true});
 
   // Mock data for promo code users and recent activities
-  const [promoUsers,setPromoUsers]=useState<any>([])
+  const [promoUsers,setPromoUsers]=useState<any[]>()
 
   const recentActivities = [
     { id: 1, activity: 'Purchased Advanced Mining Machine', date: '2024-04-20' },
@@ -45,15 +40,16 @@ const parsedData = info_data ? JSON.parse(info_data) : null;
   ];
 
   useEffect(() => {
-    // console.log(data )
+    console.log(data )
     if (isSuccess && data) {
+      console.log(data)
       // Adjust this based on your data structure
       if (Array.isArray(data)) {
         setUserData(data[0]); // If data is an array
 
         // setPromoUsers()
       }else if(data?.error){
-        if(data.error=='expired' || data.error =='no token'){
+        if(data.error=='expired' || data.error =='no token' || data.error == 'invalid input syntax for type uuid: "undefined"'){
           navigate('/login')
           localStorage.clear();
         }
@@ -69,6 +65,7 @@ const parsedData = info_data ? JSON.parse(info_data) : null;
 
   useEffect(()=>{
     setPromoUsers(userData?.promoCode?.users)
+    // console.log(userData.server_hires)
   },[userData])
 
   const Loader = () => (
@@ -104,6 +101,7 @@ const parsedData = info_data ? JSON.parse(info_data) : null;
               </div>
               <div className='right-1 absolute'>
                 <p><span className='font-semibold'>Invitation Code: </span><span className='ml-1 font-mono'>{userData?.promoCode?.promo_code}</span></p>
+                <p className='mt-3'><span className='font-semibold'>Invitation Earnings: </span><span className='ml-1 font-sans '>ksh {userData?.promoCode?.users.length * 5}</span></p>
               </div>
             </div>
           </div>
@@ -121,7 +119,7 @@ const parsedData = info_data ? JSON.parse(info_data) : null;
                 <p className='text-gray-600'>ksh { userData.account?.balance || '0.00'}</p>
               </div>
             </div>
-            <div className='bg-white shadow rounded-lg p-6 flex items-center'>
+            <div className='bg-white shadowprounded-lg p-6 flex items-center'>
               <div className='p-4 bg-green-500 rounded-full mr-4'>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -135,10 +133,11 @@ const parsedData = info_data ? JSON.parse(info_data) : null;
           </div>
 
           {/* Mining Packages */}
+          {userData?.server_hires && 
           <div className='bg-white shadow rounded-lg p-6 mb-6'>
             <h3 className='text-2xl font-bold mb-4 text-center'>Your Mining Packages</h3>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-              <div className='bg-gray-50 p-4 rounded-lg shadow'>
+              {/* <div className='bg-gray-50 p-4 rounded-lg shadow'>
                 <h5 className='text-xl font-semibold mb-2'>Standard Mining Machine</h5>
                 <p className='text-gray-700'><strong>Daily Rate:</strong> $10</p>
                 <p className='text-gray-700'><strong>Estimated Mining:</strong> 100 BTC</p>
@@ -146,27 +145,38 @@ const parsedData = info_data ? JSON.parse(info_data) : null;
                 <button className='mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition'>
                   Upgrade Package
                 </button>
-              </div>
-              <div className='bg-gray-50 p-4 rounded-lg shadow'>
+              </div> */}
+              {
+              userData?.server_hires.map((server,index)=> (
+              <div className='bg-gray-50 p-4 rounded-lg shadow' key={index}>
                 <h5 className='text-xl font-semibold mb-2'>Advanced Mining Machine</h5>
-                <p className='text-gray-700'><strong>Daily Rate:</strong> $20</p>
-                <p className='text-gray-700'><strong>Estimated Mining:</strong> 200 BTC</p>
-                <p className='text-gray-700'><strong>Bitcoin Value:</strong> $0.00002</p>
+                <p className='text-gray-700'><strong>Daily Rate:</strong> {server.day_rate}</p>
+                <p className='text-gray-700'><strong>Start Date:</strong> {server.start_date}</p>
+                <p className='text-gray-700'><strong>End Date:</strong> {server.end_date}</p>
+                <p className='text-gray-700'><strong>Days Remaining:</strong> {server.days_hired}</p>
+                <p className='text-gray-700'><strong>Total Mining:</strong> {Number(server.day_rate) * Number(server.days_hired)}</p>
                 <button className='mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition'>
                   Upgrade Package
                 </button>
               </div>
+
+                ))
+              }
             </div>
           </div>
+}
 
           {/* Add New Mining Package Button */}
           <div className='flex justify-center mb-6'>
             <button className='w-full md:w-1/2 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition'>
+            <Link to= '/'>
               Add a New Mining Package
+            </Link>
             </button>
           </div>
 
           {/* Promo Code Users Table */}
+          {promoUsers && promoUsers?.length > 1 && 
           <div className='bg-white shadow rounded-lg p-6 mb-6'>
             <h3 className='text-2xl font-bold mb-4 text-center'>Users Registered with Your Promo Code</h3>
             <div className='overflow-x-auto'>
@@ -180,7 +190,7 @@ const parsedData = info_data ? JSON.parse(info_data) : null;
                   </tr>
                 </thead>
                 <tbody>
-                  {promoUsers && promoUsers.map((user,index)  => (
+                  {promoUsers.map((user,index)  => (
                     <tr key={index} className='text-center hover:bg-gray-100'>
                       <td className='py-2 px-4 border-b'>{index + 1}</td>                      
                       <td className='py-2 px-4 border-b'>{user['user'].first_Name}{' '}{user['user'].last_Name}</td>
@@ -192,6 +202,7 @@ const parsedData = info_data ? JSON.parse(info_data) : null;
               </table>
             </div>
           </div>
+}
 
           {/* Recent Activities */}
           <div className='bg-white shadow rounded-lg p-6 mb-6'>

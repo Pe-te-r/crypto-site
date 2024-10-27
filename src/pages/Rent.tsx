@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // For navigation
 import { packagesData } from './servers';
+import { useBookServerMutation } from '../api/slice/usersSlice';
+import { useLocalStorageContext } from '../context_fi/LocalStorageContext';
 
 
 
@@ -8,6 +10,8 @@ const Rent = () => {
   const { index } = useParams(); // Extract index from the URL
   const [days, setDays] = useState(15); // Default rental period
   const navigate = useNavigate(); // For navigation
+  const [sendSeverDetails] = useBookServerMutation()
+  const{data} =useLocalStorageContext()
 
   const selectedPackage = packagesData[Number(index)]; // Get the package data by index
   
@@ -15,6 +19,20 @@ const Rent = () => {
   const goBack = () => {
     navigate('/');
   };
+
+  const show_data =()=>{
+    const info ={
+      server_id:index,
+      day_rate: selectedPackage.dailyRate,
+      day_minining: selectedPackage.estimatedMining,
+      days_hired: days,
+      totalPrice: days * Number(selectedPackage.dailyRate),
+      user_id:data.id
+    }
+    console.log(info)
+    sendSeverDetails(info)
+    // console.log(selectedPackage)
+  }
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-gray-100 rounded-lg shadow-md relative">
@@ -46,7 +64,7 @@ const Rent = () => {
 
       <p className="mt-4">Total Cost: <strong>{Number(selectedPackage.dailyRate )* days} KES</strong></p>
       
-      <button className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition">
+      <button className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition" onClick={show_data}>
         Confirm Rental
       </button>
     </div>
