@@ -18,6 +18,7 @@ interface UserData {
   // Add other fields as necessary
 }
 
+
 const Account = () => {
 
   const [userData, setUserData] = useState<UserData |  any>(null);
@@ -26,12 +27,16 @@ const Account = () => {
 // If the data is JSON, parse it to convert it back to an object
 // const parsedData = info_data ? JSON.parse(info_data) : null;
 const { data: storageData, removeData } = useLocalStorageContext();
+// useEffect(()=>{
+//   localStorage.clear();
+// },[removeData])
 
   // Fetch user data using the stored ID from localStorage
   const { data, error, isSuccess, isLoading } = useGetUserByIdQuery(storageData?.id,{refetchOnFocus:true,refetchOnReconnect:true,pollingInterval:20});
 
   // Mock data for promo code users and recent activities
   const [promoUsers,setPromoUsers]=useState<any[]>()
+  const [daily_mine,setDaily_min]=useState<number>(0)
 
   const recentActivities = [
     { id: 1, activity: 'Purchased Advanced Mining Machine', date: '2024-04-20' },
@@ -39,21 +44,31 @@ const { data: storageData, removeData } = useLocalStorageContext();
     { id: 3, activity: 'Deposited $500 to Bank', date: '2024-04-18' },
   ];
 
+  useEffect(()=>{
+    if(userData){
+      let total=0
+        for(let i = 0; i<userData?.server_hires.length;i++){
+          // console.log(userData?.server_hires[i]?.day_rate)
+          total += Number(userData?.server_hires[i]?.day_minining)
+          console.log(total)
+      }
+      setDaily_min(total)
+    }
+  },[userData])
+
   useEffect(() => {
-    console.log(data )
     if (isSuccess && data) {
-      console.log(data)
       // Adjust this based on your data structure
       if (Array.isArray(data)) {
         setUserData(data[0]); // If data is an array
 
         // setPromoUsers()
       }else if(data?.error){
-        if(data.error=='expired' || data.error =='no token' || data.error == 'invalid input syntax for type uuid: "undefined"'){
+        if(data.error=='expired' || data.error =="no token" || data.error == 'invalid input syntax for type uuid: "undefined"' || data.error == 'Unauthorized'){
           navigate('/login')
           localStorage.clear();
         }
-        // console.log('error here')
+
       }else {
         setUserData(data); // If data is an object
       }
@@ -67,6 +82,11 @@ const { data: storageData, removeData } = useLocalStorageContext();
     setPromoUsers(userData?.promoCode?.users)
     // console.log(userData.server_hires)
   },[userData])
+
+  const handleLogOut=()=>{
+    removeData()
+    navigate('/')
+  }
 
   const Loader = () => (
     <div className="flex justify-center items-center min-h-screen">
@@ -89,7 +109,7 @@ const { data: storageData, removeData } = useLocalStorageContext();
       {isSuccess && userData && (  // Render the component only if data is successfully loaded
         <>
           {/* Profile Section */}
-          <div className='bg-white shadow rounded-lg p-6 mb-6'>
+          <div className='bg-white shadow rounded-lg p-6 mb-6  flex flex-col'>
             <div className='flex flex-col md:flex-row items-center md:items-start relative'>
               <img src={image} className='w-32 h-32 rounded-full object-cover' alt="Profile" />
               <div className='mt-4 md:mt-0 md:ml-6 text-center md:text-left'>
@@ -102,6 +122,10 @@ const { data: storageData, removeData } = useLocalStorageContext();
               <div className='right-1 absolute'>
                 <p><span className='font-semibold'>Invitation Code: </span><span className='ml-1 font-mono'>{userData?.promoCode?.promo_code}</span></p>
                 <p className='mt-3'><span className='font-semibold'>Invitation Earnings: </span><span className='ml-1 font-sans '>ksh {userData?.promoCode?.users.length * 5}</span></p>
+              </div>
+              <div className='flex mx-auto  w-1/4 absolute left-2/3 bottom-0 '>
+              <button className='mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition' onClick={handleLogOut}>
+              Log out</button>
               </div>
             </div>
           </div>
@@ -127,7 +151,7 @@ const { data: storageData, removeData } = useLocalStorageContext();
               </div>
               <div>
                 <h3 className='text-xl font-semibold'>Mining Rate</h3>
-                <p className='text-gray-600'>0.000015 BTC/day</p>
+                <p className='text-gray-600'>ksh {daily_mine}</p>
               </div>
             </div>
           </div>
@@ -141,14 +165,15 @@ const { data: storageData, removeData } = useLocalStorageContext();
               userData?.server_hires.map((server,index)=> (
               <div className='bg-gray-50 p-4 rounded-lg shadow' key={index}>
                 <h5 className='text-xl font-semibold mb-2'>Advanced Mining Machine</h5>
-                <p className='text-gray-700'><strong>Daily Rate:</strong> {server.day_rate}</p>
+                <p className='text-gray-700'><strong>Daily Renting:</strong> {server.day_rate}</p>
+                <p className='text-gray-700'><strong>Daily Mining:</strong> {server.day_minining}</p>
                 <p className='text-gray-700'><strong>Start Date:</strong> {new Date(server.start_date).toLocaleDateString()}</p>
                 <p className='text-gray-700'><strong>End Date:</strong> {new Date(server.end_date).toLocaleDateString()}</p>
                 <p className='text-gray-700'><strong>Days Remaining:</strong> {server.days_hired}</p>
                 <p className='text-gray-700'><strong>Total Mining:</strong> {Number(server.day_rate) * Number(server.days_hired)}</p>
-                <button className='mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition'>
+                {/* <button className='mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition'>
                   Upgrade Package
-                </button>
+                </button> */}
               </div>
 
                 ))
@@ -196,7 +221,7 @@ const { data: storageData, removeData } = useLocalStorageContext();
 }
 
           {/* Recent Activities */}
-          <div className='bg-white shadow rounded-lg p-6 mb-6'>
+          {/* <div className='bg-white shadow rounded-lg p-6 mb-6'>
             <h3 className='text-2xl font-bold mb-4 text-center'>Recent Activities</h3>
             <ul>
               {recentActivities.map(activity => (
@@ -206,17 +231,17 @@ const { data: storageData, removeData } = useLocalStorageContext();
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           {/* Notifications or Messages */}
-          <div className='bg-white shadow rounded-lg p-6 mb-6'>
+          {/* <div className='bg-white shadow rounded-lg p-6 mb-6'>
             <h3 className='text-2xl font-bold mb-4 text-center'>Notifications</h3>
             <ul>
               <li className='py-2 px-4 border-b hover:bg-gray-50'>Your mining package has been upgraded.</li>
               <li className='py-2 px-4 border-b hover:bg-gray-50'>You have a new referral bonus.</li>
               <li className='py-2 px-4 border-b hover:bg-gray-50'>Deposit of $500 was successful.</li>
             </ul>
-          </div>
+          </div> */}
         </>
       )}
     </div>

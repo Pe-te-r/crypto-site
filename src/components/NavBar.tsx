@@ -23,6 +23,7 @@ const NavBar = () => {
 
   // Toggle menu visibility on small screens
   const toggleMenu = () => {
+    console.log(isMenuOpen)
     setIsMenuOpen(!isMenuOpen);
   };
 
@@ -46,27 +47,27 @@ const NavBar = () => {
 
       {/* Collapsible Menu for smaller screens */}
       <div
-        className={`md:hidden transition-all duration-300 ease-in-out min-w-full${
-          isMenuOpen ? 'max-h-screen' : 'max-h-0 overflow-hidden'
-        }`}
+        className={`md:hidden transition-all duration-300 ease-in-out min-w-full
+          ${isMenuOpen ? 'max-h-screen' : 'max-h-0 overflow-hidden'}
+        `}
       >
         <div className="flex flex-col bg-gray-700 p-2 space-y-4 mt-3 w-full">
-          <Link to='/'
+          <Link to='/' onClick={toggleMenu}
             className='bg-white text-black py-2 px-4 w-full text-center rounded-lg hover:bg-blue-100 hover:shadow-md transition'
           >
             Home
           </Link>
-          <Link to='/about'
+          <Link to='/about' onClick={toggleMenu}
             className='bg-white text-black py-2 px-4 w-full text-center rounded-lg hover:bg-blue-100 hover:shadow-md transition'
           >
             About Us
           </Link>
-          <Link to='/contact'
+          <Link to='/contact' onClick={toggleMenu}
             className='bg-white text-black py-2 px-4 w-full text-center rounded-lg hover:bg-blue-100 hover:shadow-md transition'
           >
             Contact
           </Link>
-          <Link to='/account'
+          <Link to='/account' onClick={toggleMenu}
             className='bg-white text-black py-2 px-4 w-full text-center rounded-lg hover:bg-blue-100 hover:shadow-md transition'
           >
             Account
