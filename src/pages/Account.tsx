@@ -28,7 +28,7 @@ const Account = () => {
 const { data: storageData, removeData } = useLocalStorageContext();
 
   // Fetch user data using the stored ID from localStorage
-  const { data, error, isSuccess, isLoading } = useGetUserByIdQuery(storageData?.id,{refetchOnFocus:true,refetchOnReconnect:true});
+  const { data, error, isSuccess, isLoading } = useGetUserByIdQuery(storageData?.id,{refetchOnFocus:true,refetchOnReconnect:true,pollingInterval:20});
 
   // Mock data for promo code users and recent activities
   const [promoUsers,setPromoUsers]=useState<any[]>()
@@ -137,22 +137,13 @@ const { data: storageData, removeData } = useLocalStorageContext();
           <div className='bg-white shadow rounded-lg p-6 mb-6'>
             <h3 className='text-2xl font-bold mb-4 text-center'>Your Mining Packages</h3>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-              {/* <div className='bg-gray-50 p-4 rounded-lg shadow'>
-                <h5 className='text-xl font-semibold mb-2'>Standard Mining Machine</h5>
-                <p className='text-gray-700'><strong>Daily Rate:</strong> $10</p>
-                <p className='text-gray-700'><strong>Estimated Mining:</strong> 100 BTC</p>
-                <p className='text-gray-700'><strong>Bitcoin Value:</strong> $0.0000125</p>
-                <button className='mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition'>
-                  Upgrade Package
-                </button>
-              </div> */}
               {
               userData?.server_hires.map((server,index)=> (
               <div className='bg-gray-50 p-4 rounded-lg shadow' key={index}>
                 <h5 className='text-xl font-semibold mb-2'>Advanced Mining Machine</h5>
                 <p className='text-gray-700'><strong>Daily Rate:</strong> {server.day_rate}</p>
-                <p className='text-gray-700'><strong>Start Date:</strong> {server.start_date}</p>
-                <p className='text-gray-700'><strong>End Date:</strong> {server.end_date}</p>
+                <p className='text-gray-700'><strong>Start Date:</strong> {new Date(server.start_date).toLocaleDateString()}</p>
+                <p className='text-gray-700'><strong>End Date:</strong> {new Date(server.end_date).toLocaleDateString()}</p>
                 <p className='text-gray-700'><strong>Days Remaining:</strong> {server.days_hired}</p>
                 <p className='text-gray-700'><strong>Total Mining:</strong> {Number(server.day_rate) * Number(server.days_hired)}</p>
                 <button className='mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition'>

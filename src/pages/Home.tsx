@@ -1,11 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import image from '../assets/bg.jpeg'
 import RentalCard from '../components/RentalCard';
 import { Link } from 'react-router-dom';
 import { packagesData } from './servers';
+import { useLocalStorageContext } from '../context_fi/LocalStorageContext';
+import { useGetBookedServerQuery } from '../api/slice/usersSlice';
 
 const Home = () => {
  
+  const { data: storageData, removeData } = useLocalStorageContext();
+  const {data,isSuccess} = useGetBookedServerQuery(storageData?.id)
+  const [bookedId,setBookedId]= useState<any[]>([])
+
+  useEffect(()=>{
+    if(data && isSuccess){
+      setBookedId(data?.book)
+    }
+    
+  },[data,isSuccess])
   return (
     <div className='min-h-screen pt-6 mt-3  flex flex-col items-center bg-white'>
 
@@ -35,9 +47,15 @@ const Home = () => {
       <div className='mt-5'>
       <h1 className="text-center text-2xl font-bold mb-6">Rental Packages</h1>
       <div className="flex w-3/4  mx-auto flex-wrap justify-center">
-        {packagesData.map((pkg, index) => (
-          <RentalCard key={index} index={index} {...pkg}/>
-        ))}
+        {packagesData.map((pkg, index) => {          
+          for(let i = 0; i<=bookedId.length;i++){
+            console.log(bookedId[i]);
+            if(bookedId[i]?.server_id == index ){
+              return <RentalCard key={index} disable={true} index={index} {...pkg}/>
+            }
+          }
+          return <RentalCard key={index} disable={false} index={index} {...pkg}/>
+          })}
       </div>
       </div>
     </div>
