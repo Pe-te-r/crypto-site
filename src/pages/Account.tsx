@@ -3,6 +3,7 @@ import image from "../assets/profile.jpeg";
 import { useLocalStorageContext } from '../context_fi/LocalStorageContext';
 import { useGetUserByIdQuery, useGetValidationQuery } from '../api/slice/usersSlice';
 import {  Link, useNavigate } from 'react-router-dom';
+import { DiVim } from 'react-icons/di';
 
 // Define TypeScript interfaces for better type safety
 interface UserData {
@@ -181,10 +182,10 @@ const { data: storageData, removeData } = useLocalStorageContext();
                 <div className="flex flex-col md:flex-row w-full justify-between">
                   {/* Left Content */}
                   <div className="md:w-1/2 space-y-2 mb-4 md:mb-0">
-                    <p className="text-gray-700"><strong>Daily Renting:</strong> {server.day_rate}</p>
-                    <p className="text-gray-700"><strong>Daily Mining:</strong> {server.day_minining}</p>
+                    <p className="text-gray-700"><strong>Daily Renting:</strong> Ksh. {server.day_rate}</p>
+                    <p className="text-gray-700"><strong>Daily Mining:</strong> Ksh. {server.day_minining}</p>
                     <p className="text-gray-700"><strong>Days Remaining:</strong> {server.days_hired}</p>
-                    <p className="text-gray-700"><strong>Total Mining:</strong> {Number(server.day_rate) * Number(server.days_hired)}</p>
+                    <p className="text-gray-700"><strong>Total Mining: </strong>Ksh. {Number(server.day_rate) * Number(server.days_hired)}</p>
                   </div>
             
                   {/* Right Content */}
@@ -218,7 +219,7 @@ const { data: storageData, removeData } = useLocalStorageContext();
 
           {/* Promo Code Users Table */}
           {/* {promoUsers && promoUsers?.length > 1 &&  */}
-          { Array.isArray(promoUsers) && promoUsers.length > 0 &&
+          { Array.isArray(promoUsers) && promoUsers.length > 0 ?
           <div className='bg-white shadow rounded-lg p-6 mb-6'>
             <h3 className='text-2xl font-bold mb-4 text-center'>Users Registered with Your Promo Code</h3>
             <div className='overflow-x-auto'>
@@ -243,8 +244,13 @@ const { data: storageData, removeData } = useLocalStorageContext();
                 </tbody>
               </table>
             </div>
+          </div> :
+          <div>
+            <h3 className='text-2xl font-bold mb-4 text-center'>No user Registered with your verification code</h3>
+            <p className='text-center text-[1.1rem]'>Share code: <span className='font-mono'>{userData?.promoCode?.promo_code} </span>  with new registering users to earn more.</p>
+
           </div>
-}
+          }
         </>
       )}
     </div>
