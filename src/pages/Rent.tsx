@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // For navigation
+import { useParams, useNavigate, Link } from 'react-router-dom'; // For navigation
 import { packagesData } from './servers';
 import { useBookServerMutation } from '../api/slice/usersSlice';
 import { useLocalStorageContext } from '../context_fi/LocalStorageContext';
@@ -65,7 +65,9 @@ const Rent = () => {
       <p className="mt-4">Total Cost: <strong>{Number(selectedPackage.dailyRate )* days} KES</strong></p>
       
       <button className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition" onClick={show_data}>
+        <Link to='/'>
         Confirm Rental
+        </Link>
       </button>
     </div>
   );

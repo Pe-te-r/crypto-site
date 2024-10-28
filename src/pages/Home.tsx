@@ -9,7 +9,7 @@ import { useGetBookedServerQuery } from '../api/slice/usersSlice';
 const Home = () => {
  
   const { data: storageData } = useLocalStorageContext();
-  const {data,isSuccess} = useGetBookedServerQuery(storageData?.id,{refetchOnFocus:true,refetchOnReconnect:true})
+  const {data,isSuccess} = useGetBookedServerQuery(storageData?.id,{refetchOnFocus:true,refetchOnReconnect:true,pollingInterval:10000})
   const [bookedId,setBookedId]= useState<any[]>([])
 
   useEffect(()=>{
@@ -23,7 +23,6 @@ const Home = () => {
 
     <div className='relative w-2/3 border border-black flex flex-col justify-center' > 
       <img src={image} alt="" className='w-full h-[650px] blur-sm'/>
-
     <div className='absolute top-2 left-1 bg-yellow-500 p-3 rounded-md'>
       <p>Effortless Crypto Mining-Rent, Mine, Earn</p>
     </div>
@@ -32,6 +31,8 @@ const Home = () => {
     </div>
     <div className='shadow-lg rounded-md p-2 w-2/3  flex flex-col bg-gray-200 absolute right-0 top-1/3 '>
         <p className='font-bold text-center font-sans'>Enjoy professional-grade mining machines with full maintenance support, optimized for maximum returns.</p>
+        {      !storageData?.logged &&
+        <>
         <div className='m-2 mb-0 flex items-center place-content-center'>
           {/* <input type="Email" className='border-2 rounded-md m-1 outline-none p-2 w-2/3 font-serif' placeholder='Email'/> */}
           <Link to='/login' className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 w-2/4 text-center">
@@ -39,6 +40,8 @@ const Home = () => {
           </Link>
         </div>
         <Link to='/register' className='text-center text-red-700 cursor-pointer'>don't have an account?</Link>
+        </>
+        }
         <div className='mt-3 mb-3'>
           <p className='font-bold text-center'>Rent powerful mining machines remotely and start earning cryptocurrency without the need for expensive hardware or technical knowledge.</p>
         </div>

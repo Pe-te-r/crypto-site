@@ -21,18 +21,17 @@ interface UserData {
 
 const Account = () => {
 
+
+  
   const [userData, setUserData] = useState<UserData |  any>(null);
   // const info_data = localStorage.getItem("myData"); // Replace "myData" with the key of the item you want to retrieve
 
 // If the data is JSON, parse it to convert it back to an object
-// const parsedData = info_data ? JSON.parse(info_data) : null;
 const { data: storageData, removeData } = useLocalStorageContext();
-// useEffect(()=>{
-//   localStorage.clear();
-// },[removeData])
+
 
   // Fetch user data using the stored ID from localStorage
-  const { data, error, isSuccess, isLoading } = useGetUserByIdQuery(storageData?.id,{refetchOnFocus:true,refetchOnReconnect:true,pollingInterval:20});
+  const { data, error, isSuccess, isLoading,status } = useGetUserByIdQuery(storageData?.id,{refetchOnFocus:true,refetchOnReconnect:true,pollingInterval:5000});
 
   // Mock data for promo code users and recent activities
   const [promoUsers,setPromoUsers]=useState<any[]>()
@@ -60,27 +59,33 @@ const { data: storageData, removeData } = useLocalStorageContext();
     if (isSuccess && data) {
       // Adjust this based on your data structure
       if (Array.isArray(data)) {
+        console.log(status)
         setUserData(data[0]); // If data is an array
 
         // setPromoUsers()
-      }else if(data?.error){
-        if(data.error=='expired' || data.error =="no token" || data.error == 'invalid input syntax for type uuid: "undefined"' || data.error == 'Unauthorized'){
+      }else if(data?.error || error){
+        if(data.error=='expired' || data.error =="no token" || data.error == 'invalid input syntax for type uuid: "undefined"' || data.error == 'Unauthorized' ){
           navigate('/login')
-          localStorage.clear();
         }
 
       }else {
         setUserData(data); // If data is an object
       }
     }
+    if(error){
+      console.log(data)
+      console.log(error)
+    }
    
   }, [isSuccess, data,error]);
   const navigate = useNavigate()
   
+  console.log(promoUsers)
 
   useEffect(()=>{
     setPromoUsers(userData?.promoCode?.users)
-    // console.log(userData.server_hires)
+
+    // console.log(userData?.promoCode?.users[0]['user'])
   },[userData])
 
   const handleLogOut=()=>{
@@ -112,18 +117,20 @@ const { data: storageData, removeData } = useLocalStorageContext();
           <div className='bg-white shadow rounded-lg p-6 mb-6  flex flex-col'>
             <div className='flex flex-col md:flex-row items-center md:items-start relative'>
               <img src={image} className='w-32 h-32 rounded-full object-cover' alt="Profile" />
-              <div className='mt-4 md:mt-0 md:ml-6 text-center md:text-left'>
-                <h1 className='text-2xl font-bold'>
+              <div className='mt-4 md:mt-0 md:ml-6 text-center md:text-left w-full'>
+                <h1 className='text-2xl font-bold text-center'>
                   {userData.first_Name} {userData.last_Name}
                 </h1>
-                <p className='text-gray-600'>Email: {userData.email}</p>
-                <p className='text-gray-600'>Member since: {new Date(userData.created_at).toLocaleDateString()}</p>
-              </div>
-              <div className='right-1 absolute'>
-                <p><span className='font-semibold'>Invitation Code: </span><span className='ml-1 font-mono'>{userData?.promoCode?.promo_code}</span></p>
-                <p className='mt-3'><span className='font-semibold'>Invitation Earnings: </span><span className='ml-1 font-sans '>ksh {userData?.promoCode?.users.length * 5}</span></p>
-              </div>
-              <div className='flex mx-auto  w-1/4 absolute left-2/3 bottom-0 '>
+                <div className='flex w-auto justify-evenly mt-8'>
+                  <div>
+                    <p><span className='font-semibold'>Email: </span><span className='ml-1 font-mono'>{userData.email}</span></p>
+                    <p><span className='font-semibold'>Member since: </span><span className='ml-1 font-mono'>{new Date(userData.created_at).toDateString()}</span></p>
+                  </div>
+                  <div>
+                    <p><span className='font-semibold'>Invitation Code: </span><span className='ml-1 font-mono'>{userData?.promoCode?.promo_code}</span></p>
+                    <p className='mt-3'><span className='font-semibold'>Invitation Earnings: </span><span className='ml-1 font-sans '>ksh {userData?.promoCode?.users.length * 5}</span></p>
+                  </div>
+                </div>
               <button className='mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition' onClick={handleLogOut}>
               Log out</button>
               </div>
@@ -151,48 +158,67 @@ const { data: storageData, removeData } = useLocalStorageContext();
               </div>
               <div>
                 <h3 className='text-xl font-semibold'>Mining Rate</h3>
-                <p className='text-gray-600'>ksh {daily_mine}</p>
+                <p className='text-gray-600'>ksh {daily_mine} /per day</p>
               </div>
             </div>
           </div>
 
           {/* Mining Packages */}
-          {userData?.server_hires && 
+          {userData?.server_hires && userData?.server_hires.length > 0 &&
           <div className='bg-white shadow rounded-lg p-6 mb-6'>
             <h3 className='text-2xl font-bold mb-4 text-center'>Your Mining Packages</h3>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
               {
-              userData?.server_hires.map((server,index)=> (
-              <div className='bg-gray-50 p-4 rounded-lg shadow' key={index}>
-                <h5 className='text-xl font-semibold mb-2'>Advanced Mining Machine</h5>
-                <p className='text-gray-700'><strong>Daily Renting:</strong> {server.day_rate}</p>
-                <p className='text-gray-700'><strong>Daily Mining:</strong> {server.day_minining}</p>
-                <p className='text-gray-700'><strong>Start Date:</strong> {new Date(server.start_date).toLocaleDateString()}</p>
-                <p className='text-gray-700'><strong>End Date:</strong> {new Date(server.end_date).toLocaleDateString()}</p>
-                <p className='text-gray-700'><strong>Days Remaining:</strong> {server.days_hired}</p>
-                <p className='text-gray-700'><strong>Total Mining:</strong> {Number(server.day_rate) * Number(server.days_hired)}</p>
-                {/* <button className='mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition'>
+             userData?.server_hires.map((server, index) => (
+              <div className="bg-gray-50 p-6 rounded-lg shadow-lg flex flex-col items-center mb-6" key={index}>
+                {/* Centered Heading */}
+                <h5 className="text-2xl font-semibold mb-4 text-center text-green-600">
+                  {/* Advanced Mining Machine */}
+                  Machine info
+                </h5>
+            
+                {/* Content Container */}
+                <div className="flex flex-col md:flex-row w-full justify-between">
+                  {/* Left Content */}
+                  <div className="md:w-1/2 space-y-2 mb-4 md:mb-0">
+                    <p className="text-gray-700"><strong>Daily Renting:</strong> {server.day_rate}</p>
+                    <p className="text-gray-700"><strong>Daily Mining:</strong> {server.day_minining}</p>
+                    <p className="text-gray-700"><strong>Days Remaining:</strong> {server.days_hired}</p>
+                    <p className="text-gray-700"><strong>Total Mining:</strong> {Number(server.day_rate) * Number(server.days_hired)}</p>
+                  </div>
+            
+                  {/* Right Content */}
+                  <div className="md:w-1/2 space-y-2">
+                    <p className="text-gray-700"><strong>Start Date:</strong> {new Date(server.start_date).toDateString()}</p>
+                    <p className="text-gray-700"><strong>End Date:</strong> {new Date(server.end_date).toDateString()}</p>
+                  </div>
+                </div>
+            
+                {/* Button */}
+                {/* Uncomment if needed */}
+                {/* <button className="mt-4 w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition">
                   Upgrade Package
                 </button> */}
               </div>
+            ))
+          }            
 
-                ))
-              }
             </div>
           </div>
 }
 
           {/* Add New Mining Package Button */}
           <div className='flex justify-center mb-6'>
-            <button className='w-full md:w-1/2 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition'>
-            <Link to= '/'>
+            <Link to= '/' className='w-full md:w-1/2 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition text-center'>
+            {/* <button className='w-full md:w-1/2 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition'> */}
               Add a New Mining Package
+            {/* </button> */}
             </Link>
-            </button>
           </div>
 
           {/* Promo Code Users Table */}
-          {promoUsers && promoUsers?.length > 1 && 
+          {/* {promoUsers && promoUsers?.length > 1 &&  */}
+          { Array.isArray(promoUsers) && promoUsers.length > 0 &&
           <div className='bg-white shadow rounded-lg p-6 mb-6'>
             <h3 className='text-2xl font-bold mb-4 text-center'>Users Registered with Your Promo Code</h3>
             <div className='overflow-x-auto'>
@@ -211,7 +237,7 @@ const { data: storageData, removeData } = useLocalStorageContext();
                       <td className='py-2 px-4 border-b'>{index + 1}</td>                      
                       <td className='py-2 px-4 border-b'>{user['user'].first_Name}{' '}{user['user'].last_Name}</td>
                       <td className='py-2 px-4 border-b'>{user['user'].email}</td>
-                      <td className='py-2 px-4 border-b'>{user['user'].created_at}</td>
+                      <td className='py-2 px-4 border-b'>{new Date(user['user'].created_at).toDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -219,29 +245,6 @@ const { data: storageData, removeData } = useLocalStorageContext();
             </div>
           </div>
 }
-
-          {/* Recent Activities */}
-          {/* <div className='bg-white shadow rounded-lg p-6 mb-6'>
-            <h3 className='text-2xl font-bold mb-4 text-center'>Recent Activities</h3>
-            <ul>
-              {recentActivities.map(activity => (
-                <li key={activity.id} className='flex justify-between py-2 border-b last:border-0 hover:bg-gray-50'>
-                  <span>{activity.activity}</span>
-                  <span className='text-gray-500'>{activity.date}</span>
-                </li>
-              ))}
-            </ul>
-          </div> */}
-
-          {/* Notifications or Messages */}
-          {/* <div className='bg-white shadow rounded-lg p-6 mb-6'>
-            <h3 className='text-2xl font-bold mb-4 text-center'>Notifications</h3>
-            <ul>
-              <li className='py-2 px-4 border-b hover:bg-gray-50'>Your mining package has been upgraded.</li>
-              <li className='py-2 px-4 border-b hover:bg-gray-50'>You have a new referral bonus.</li>
-              <li className='py-2 px-4 border-b hover:bg-gray-50'>Deposit of $500 was successful.</li>
-            </ul>
-          </div> */}
         </>
       )}
     </div>
